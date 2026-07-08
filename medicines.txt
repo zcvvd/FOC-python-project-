@@ -1,0 +1,62 @@
+# main.py
+# The entry point of the MedStore system.
+# Shows the menu, calls the right module based on the user's choice,
+# and saves the inventory when exiting.
+
+import inventory
+import display
+import sales
+import restock
+import search
+import utils
+
+def main():
+    """Start the MedStore wholesale  system."""
+    print("\n   Welcome to MedStore  System")
+    
+
+    medicines = inventory.load_inventory()
+    print(f"\n   Loaded {len(medicines)} medicine(s) from the file.")
+
+    while True:
+        try:
+            print("\n" + "=" * 30)
+            print("   MEDSTORE   ")
+            print("=" * 30)
+            print("1. View all medicines")
+            print("2. Sell medicines to customer")
+            print("3. Restock medicines from supplier")
+            print("4. Search for a medicine")
+            print("0. Exit")
+
+            choice = utils.get_positive_int("Enter your choice: ")
+
+            if choice == 0:
+                inventory.save_inventory(medicines)
+                print("Data saved. Thank you for using MedStore. Goodbye!")
+                break
+
+            elif choice == 1:
+                display.show_all_medicines(medicines)
+                utils.wait_for_enter()
+
+            elif choice == 2:
+                sales.sell(medicines)
+
+            elif choice == 3:
+                restock.restock(medicines)
+
+            elif choice == 4:
+                search.search(medicines)
+
+            else:
+                print("Invalid choice. Please select from the menu.")
+
+        except KeyboardInterrupt:
+            print("\nSaving inventory before exit...")
+            inventory.save_inventory(medicines)
+            print(" Data has been Saved. Goodbye!")
+            break
+
+if __name__ == "__main__":
+    main()
